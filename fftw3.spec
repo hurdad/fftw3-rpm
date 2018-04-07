@@ -42,11 +42,34 @@ you will need to install %{name}-devel.
 %configure \
     --disable-static \
     --enable-shared \
+    --enable-openmp \
     --enable-threads 
 %{__make} %{?_smp_mflags}
 
 %install
 %{__rm} -rf %{buildroot}
+%{__make} install DESTDIR="%{buildroot}"
+
+# hack to also compile/install single-precision version:
+make distclean
+%configure \
+    --disable-static \
+    --enable-shared \
+    --enable-threads \
+    --enable-openmp \
+    --enable-float
+%{__make} %{?_smp_mflags}
+%{__make} install DESTDIR="%{buildroot}"
+
+# hack to also compile/install long-double-precision version:
+make distclean
+%configure \
+    --disable-static \
+    --enable-shared \
+    --enable-threads \
+    --enable-openmp \
+    --enable-long-double
+%{__make} %{?_smp_mflags}
 %{__make} install DESTDIR="%{buildroot}"
 
 ### Clean up docs
@@ -73,14 +96,25 @@ you will need to install %{name}-devel.
 %doc AUTHORS ChangeLog COPYING COPYRIGHT NEWS README* TODO
 %{_libdir}/libfftw3.so.*
 %{_libdir}/libfftw3_threads.so.*
+%{_libdir}/libfftw3_omp.so.*
+%{_libdir}/libfftw3f.so.*
+%{_libdir}/libfftw3f_threads.so.*
+%{_libdir}/libfftw3f_omp.so.*
+%{_libdir}/libfftw3l.so.*
+%{_libdir}/libfftw3l_threads.so.*
+%{_libdir}/libfftw3l_omp.so.*
 
 %files devel
 %defattr(-, root, root, 0755)
-%doc doc/*.pdf doc/FAQ/fftw-faq.html/ doc/html/
+#%doc doc/*.pdf doc/FAQ/fftw-faq.html/ doc/html/
 %doc %{_infodir}/fftw3.info*
 %doc %{_mandir}/man1/fftw-wisdom.1*
+%doc %{_mandir}/man1/fftwf-wisdom.1*
+%doc %{_mandir}/man1/fftwl-wisdom.1*
 %doc %{_mandir}/man1/fftw-wisdom-to-conf.1*
 %{_bindir}/fftw-wisdom
+%{_bindir}/fftwf-wisdom
+%{_bindir}/fftwl-wisdom
 %{_bindir}/fftw-wisdom-to-conf
 %{_includedir}/fftw3.f
 %{_includedir}/fftw3.h
@@ -89,7 +123,16 @@ you will need to install %{name}-devel.
 %{_includedir}/fftw3q.f03
 %{_libdir}/libfftw3.so
 %{_libdir}/libfftw3_threads.so
+%{_libdir}/libfftw3_omp.so
+%{_libdir}/libfftw3f.so
+%{_libdir}/libfftw3f_threads.so
+%{_libdir}/libfftw3f_omp.so
+%{_libdir}/libfftw3l.so
+%{_libdir}/libfftw3l_threads.so
+%{_libdir}/libfftw3l_omp.so
 %{_libdir}/pkgconfig/fftw3.pc
+%{_libdir}/pkgconfig/fftw3f.pc
+%{_libdir}/pkgconfig/fftw3l.pc
 %{_libdir}/cmake/fftw3/*
 
 %changelog
