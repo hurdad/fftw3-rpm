@@ -1,6 +1,6 @@
 # fftw
 SHELL := /bin/bash 
-version = 3.3.7
+version = 3.3.8
 name = fftw
 full_name = $(name)-$(version)
 download_url = "http://www.fftw.org/$(full_name).tar.gz"
