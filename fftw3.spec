@@ -447,11 +447,26 @@ do
  module unload mpi/${mpi}-%{_arch}
 done
 
-%ldconfig_scriptlets libs-single
-%ldconfig_scriptlets libs-double
-%ldconfig_scriptlets libs-long
+%post libs-single
+/sbin/ldconfig
+%postun libs-single
+/sbin/ldconfig
+
+%post libs-double
+/sbin/ldconfig
+%postun libs-double
+/sbin/ldconfig
+
+%post libs-long
+/sbin/ldconfig
+%postun libs-long
+/sbin/ldconfig
+
 %if %{quad}
-%ldconfig_scriptlets libs-quad
+%post libs-quad
+/sbin/ldconfig
+%postun libs-quad
+/sbin/ldconfig
 %endif
 
 %post devel
